@@ -44,7 +44,7 @@
 
         function loadData() {
             $.getJSON('js/challenge.json').then(function (data) {
-                data.projects.map(function (p, i) {
+                data.projects.map(function (p) {
                     this.push(new Project(p));
                 }, Projects);
             });
@@ -76,6 +76,10 @@
 
         }
 
+        function getElementValue(parent, selector) {
+            return $(parent).find(selector).val();
+        }
+
         function attachClickEvent() {
             $("#name>a").on('click', function () {
                 var $el = $(this);
@@ -94,7 +98,7 @@
                 var id = $el.find('span').text();
                 populateItemViewWthData($('#itemView'), getProjectById(id));
             });
-            $('#newProjectButton').on('click', function(){
+            $('#newProjectButton').on('click', function () {
                 var $modal = $('#myModal');
                 $modal.find('.modal-title').text('Add New Project');
                 $modal.modal();
@@ -105,15 +109,19 @@
                 var form = $(this).find('#form');
                 console.log(form);
             });
-            $('#form').on('submit', function(e){
-                var projectName = $(this).find('#projectNameForm').val();
-                var projectOwner = $(this).find('#projectOwnerForm').val();
+            $('#form').on('submit', function (e) {
+                var projectName = getElementValue(this, '#projectNameForm');
+                var projectOwner = getElementValue(this, '#projectOwnerForm');
+                var startDateForm = getElementValue(this, '#startDateForm');
+                var endDateForm = getElementValue(this, '#endDateForm');
+                var projectDescriptionForm = getElementValue(this, '#projectDescriptionForm');
+                var projectActiveForm = $(this).find('#projectActiveForm').is(":checked");
 
-                console.log(projectName, projectOwner);
+                    console.log(projectName, projectOwner, projectDescriptionForm, projectActiveForm);
                 e.preventDefault();
             });
 
-            $('#saveProjectButton').on('click', function(){
+            $('#saveProjectButton').on('click', function () {
                 $('#form').trigger('submit');
                 $('#myModal').modal('hide');
             });
