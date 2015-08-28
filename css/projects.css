@@ -1,0 +1,218 @@
+body {
+    background-color: rgb(245, 245, 245);
+    font-size: 12px;
+    color: rgb(168, 170, 171);
+}
+
+.app {
+    margin: 20px;
+}
+
+.navigation {
+    position: absolute;
+    cursor: pointer;
+    top: 230px;
+}
+
+.navigation.prev {
+    left: -50px;
+}
+
+.navigation.next {
+    right: -50px;
+}
+
+.link {
+    cursor: pointer;
+}
+
+.app-wrapper {
+    padding-bottom: 50px;
+    position: relative;
+}
+
+.app-header {
+    padding: 15px;
+}
+
+.app-main {
+    padding: 2px 15px 2px 15px;
+}
+
+.container {
+    background-color: #FFFFFF;
+    border: 1px solid rgb(204, 204, 204);
+    border-radius: 5px;
+}
+
+.btnc {
+    padding: 4px 12px !important;
+    font-size: 12px;
+    font-style: italic;
+}
+
+.btn-group > .btn {
+    float: none;
+}
+
+.btn-group .btn + .btn {
+    margin-left: 0;
+}
+
+.btn-group > .btn:not(:first-child):not(:last-child):not(.dropdown-toggle) {
+    border-radius: 4px;
+}
+
+.btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle) {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.btn-group > .btn:last-child:not(:first-child), .btn-group > .dropdown-toggle:not(:first-child) {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+.status {
+    display: inline-block;
+    min-width: 10px;
+    padding: 3px 7px;
+    line-height: 1;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-color: rgb(244, 245, 247);
+    border: 1px solid rgb(240, 240, 240);
+    border-radius: 10px;
+}
+
+.status.active {
+    background-color: rgb(99, 192, 99);
+    border: 1px solid rgb(240, 240, 240);
+
+}
+
+.table > thead > tr {
+    background-color: rgb(131, 137, 138);
+    color: #FFF;
+}
+
+.table > thead > tr > th {
+    border: none;
+}
+
+.table > thead > tr > th, .table > tbody > tr > td {
+    padding: 5px 10px;
+}
+
+.table > tbody > tr > td {
+    vertical-align: middle;
+    border: none;
+}
+
+.table > tbody > tr > td:nth-last-child(-n+2) {
+    text-align: center;
+}
+
+.btn-primary {
+    background-color: rgb(33, 150, 199);
+}
+
+.btn-custom {
+    background-color: #FFF;
+    border: 1px solid rgb(231, 231, 231);
+}
+
+.btn-custom.active {
+    background-color: rgb(49, 157, 202);
+    border-color: rgb(49, 157, 202);
+    color: #FFFFFF;
+}
+
+.opacity {
+    opacity: 0.5;
+}
+
+.line-header {
+    border-bottom: 1px solid orange;
+}
+
+.line-footer {
+    border-bottom: 1px solid rgb(199, 200, 201);
+}
+
+.step-bar.small {
+    font-size: 10px;
+    color: rgb(140, 146, 147);
+    position: relative;
+}
+
+.step-bar.large {
+    font-size: 12px;
+    color: rgb(140, 146, 147);
+    position: relative;
+}
+
+.step-bar .total {
+    position: absolute;
+    left: -16px;
+    top: -2px;
+}
+
+.step-bar .current {
+    position: absolute;
+    right: -16px;
+    top: -2px;
+}
+
+.step-bar .current.active {
+    color: rgb(99, 192, 99);
+}
+
+.progress {
+    height: 11px !important;
+    margin-bottom: 0;
+    background-color: rgb(213, 213, 213);
+    border-radius: 2px;
+    box-shadow: none;
+}
+
+.progress .progress-bar {
+    background-color: rgb(99, 192, 99);
+    min-width: 3%;
+    box-shadow: none;
+}
+
+.go-back-button {
+    -ms-transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    transform: rotate(-90deg);
+    cursor: pointer;
+    color: inherit;
+}
+
+.go-back-button:hover {
+    text-decoration: none;
+    color: inherit;
+}
+
+.project-details {
+    /*padding: 10px 10px 5px 10px;*/
+}
+
+.project-owner-inner {
+    padding: 10px 20px;
+}
+
+.project-details {
+    padding: 15px;
+}
+
+.avatar-wrapper, .progress-wrapper {
+    margin-bottom: 20px;
+}
+
+.avatar-name {
+    vertical-align: bottom;
+    font-size: 14px;
+    color: rgb(33, 150, 199);
+}
