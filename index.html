@@ -19,10 +19,10 @@
                             <h4>Projects Index</h4>
                         </div>
                         <div class="col-md-4 col-xs-6 text-center">
-                            <!--{{filter-buttons filter=activeFilter action="applyFilter"}}-->
+                            <div id="project-filter" class="button-filters btn-group" data-toggle="buttons"></div>
                         </div>
                         <div class="col-md-4 col-xs-6 text-right">
-                            <button id="newProjectButton" class="btn btn-warning">New project</button>
+                            <a href="#myModal" id="newProjectButton" data-toggle="modal" data-title="Add New Project" class="btn btn-warning">New project</a>
                         </div>
                     </div>
                 </div>
@@ -36,22 +36,22 @@
             </div>
             <div class="row app-main">
                 <div class="col-xs-12">
-                    <table class="table table-condensed">
+                    <table id="projectTable" class="table table-condensed">
                         <thead>
                         <tr>
-                            <th class="link">
+                            <th class="link" data-sortableBy="name">
                                 <span>Project Name</span>
                                 <span class="fa fa-caret-down pull-right"></span>
                             </th>
-                            <th class="link">
+                            <th class="link" data-sortableBy="owner">
                                 <span>Owner:</span>
                                 <span class="fa fa-caret-down pull-right"></span>
                             </th>
-                            <th class="link">
+                            <th class="link" data-sortableBy="end_date">
                                 <span>Due:</span>
                                 <span class="fa fa-caret-down pull-right"></span>
                             </th>
-                            <th class="link">
+                            <th class="link" data-sortableBy="total_steps">
                                 <span>Steps:</span>
                                 <span class="fa fa-caret-down pull-right"></span>
                             </th>
@@ -117,7 +117,7 @@
                         </div>
                         <div class="col-xs-12">
                             <div class="col-xs-12 text-right">
-                                <button class="btn btn-primary">Edit</button>
+                                <a href="#myModal" id="editProjectButton" data-title="Edit Project" data-toggle="modal" class="btn btn-primary">Edit</a>
                             </div>
                         </div>
                     </div>
@@ -199,6 +199,10 @@
             <div class="modal-body">
                 <form id="form">
                     <div class="row">
+                        <div class="form-group col-xs-12 sr-only">
+                            <label for="projectIdForm"></label>
+                            <input type="text" class="form-control" id="projectIdForm"/>
+                        </div>
                         <div class="form-group col-xs-12">
                             <label for="projectNameForm">Project Name</label>
                             <input type="text" class="form-control" maxlength="50" id="projectNameForm" placeholder="Project Name"/>

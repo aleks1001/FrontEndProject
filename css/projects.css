@@ -56,7 +56,7 @@ body {
 }
 
 .btn-group .btn + .btn {
-    margin-left: 0;
+    margin-left: 5px;
 }
 
 .btn-group > .btn:not(:first-child):not(:last-child):not(.dropdown-toggle) {
