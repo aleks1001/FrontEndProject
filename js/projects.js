@@ -47,8 +47,14 @@
                 return moment.unix(self.end_date).format('ll');
             }
         });
+        this.datePickerStartDate = function(){
+            return moment.unix(self.start_date).format('L');
+        };
+        this.datePickerEndDate = function(){
+            return moment.unix(self.end_date).format('L');
+        };
         this.getProjectPeriod = function () {
-            return moment(this.startDate, 'll').format('L') + ' to ' + moment(this.endDate, 'll').format('L');
+            return moment.unix(self.start_date).format('L') + ' to ' + moment.unix(self.end_date).format('L');
         };
         this.getPercentComplete = function () {
             var total = this.total_steps;
@@ -95,6 +101,7 @@
                     var p = self.getProjectById(projectId);
                     $el.find('#' + p.id).text(p.name);
                     $el.find('#owner').text(p.owner.name);
+                    $el.find('#endDate').text(p.endDate);
                     $el.find('.activity').activity(p.active);
                     $el.find('.step-bar.small').stepBar('update', p);
                     $el.attr('data-visible', p.active);
@@ -133,7 +140,7 @@
         });
 
         function addProject($el, p) {
-            $el.append('<tr data-visible="' + p.active + '"><td id="name"><a id=' + p.id + ' class="link">' + p.name + '</a></td><td id="owner">' + p.owner.name + '</td><td>' + p.endDate + '</td><td id="statusBar"><div class="step-bar small"></div></td><td><span class="activity status">&nbsp;</span></td></tr>');
+            $el.append('<tr data-visible="' + p.active + '"><td id="name"><a id=' + p.id + ' class="link">' + p.name + '</a></td><td id="owner">' + p.owner.name + '</td><td id="endDate">' + p.endDate + '</td><td id="statusBar"><div class="step-bar small"></div></td><td><span class="activity status">&nbsp;</span></td></tr>');
         }
 
         function projectClickHandler() {
@@ -193,6 +200,7 @@
 
         function attachClickEvent() {
             //click event to go from list view into item view
+            var $datePicker = $('#projectDatePicker');
             $('#toListView').on('click', function () {
                 var $table = $('#projectTable');
                 $('#itemView').hide();
@@ -204,9 +212,17 @@
                 var id = $el.find('span').text();
                 populateItemViewWthData($('#itemView'), getProjectById(id));
             });
+            $datePicker.on('show', function(){
+
+            });
             $('#myModal').on('show.bs.modal', function (e) {
                 //event is fired right after "show" instance method is called
                 var $trigger = $(e.relatedTarget);
+                if ($trigger.length < 1) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                }
                 var $modal = $(e.currentTarget);
                 var title = $trigger.data('title');
                 var projectId = $trigger.attr('data-project');
@@ -220,6 +236,8 @@
                     if (p.active) {
                         $modal.find('#projectActiveForm').prop('checked', true);
                     }
+                    $datePicker.find('input[name="start"]').datepicker('update', p.datePickerStartDate());
+                    $datePicker.find('input[name="end"]').datepicker('update', p.datePickerEndDate());
                 } else {
                     setElementValue($modal, '#projectIdForm', Projects.length + 1);
                 }
@@ -230,6 +248,8 @@
                 setElementValue($modal, '#projectNameForm', '');
                 setElementValue($modal, '#projectOwnerForm', '');
                 setElementValue($modal, '#projectDescriptionForm', '');
+                $datePicker.find('input[name="start"]').datepicker('update', '');
+                $datePicker.find('input[name="end"]').datepicker('update', '');
                 $modal.find('#projectActiveForm').prop('checked', '');
             }).on('shown.bs.modal', function (e) {
                 //event is fired when the modal has been made visible to the user
@@ -238,12 +258,17 @@
             });
             $('#form').on('submit', function (e) {
                 //on form submit create and anonymous object to store the project
+                var $datePicker = $('#projectDatePicker');
+                var startDate = $datePicker.find('input[name="start"]').datepicker('getDate');
+                var endDate = $datePicker.find('input[name="end"]').datepicker('getDate');
                 var p = {
                     id: getElementValue(this, '#projectIdForm'),
                     name: getElementValue(this, '#projectNameForm'),
                     owner: {name: getElementValue(this, '#projectOwnerForm')},
                     description: getElementValue(this, '#projectDescriptionForm'),
-                    active: $(this).find('#projectActiveForm').is(":checked")
+                    active: $(this).find('#projectActiveForm').is(":checked"),
+                    start_date: moment(startDate).format('X'),
+                    end_date: moment(endDate).format('X')
                 };
                 var project = getProjectById(p.id);
                 var $table = $('#projectTable').find('tbody');
@@ -253,14 +278,14 @@
                     project.description = p.description;
                     project.active = p.active;
                     project.owner.name = p.owner.name;
+                    project.start_date = p.start_date;
+                    project.end_date = p.end_date;
                     populateItemViewWthData($('#itemView'), project);
                     $table.find('tr').eq(project.id - 1).trigger('tr:update', p.id);
                 } else {
                     //if creating a new project, get an instance, add to the table and redraw jquery components
                     p['current_step'] = 10;
                     p['total_steps'] = 18;
-                    p['start_date']= moment(new Date()).format('X');
-                    p['end_date'] = moment(new Date()).add(5, 'days').format('X')
                     var newProject = new Project(p);
                     Projects.push(newProject);
                     addProject($table, newProject);
@@ -290,6 +315,11 @@
             onFilter: function (text) {
                 applyFilterToProjects(text);
             }
+        });
+
+        $('#projectDatePicker').datepicker({
+            autoclose: true,
+            todayHighlight: true
         });
     });
 
