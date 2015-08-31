@@ -67,12 +67,14 @@
         this.projects = data;
         this.element = $('#projectTable');
         this.populateTable = function (addProject) {
+            //function creates table rows
             this.projects.forEach(function (p) {
                 addProject(self.element.find('tbody'), p);
             });
             return self;
         };
         this.renderTableComponents = function () {
+            //function generates jQuery components for each table row
             $('.step-bar.small').each(function (index, element) {
                 var project = getProjectByIndex(self.projects, index);
                 $(element).stepBar('create', project);
@@ -86,7 +88,9 @@
         this.attachTableEvents = function (handler) {
             var $body = $('body');
             $body.on('click', 'a.link', handler)
+                //event is fired when click in the project name link to go to item view
                 .on('tr:update', 'tbody tr', function (e, projectId) {
+                    //event is fired when table row is needed to be updated
                     var $el = $(e.currentTarget);
                     var p = self.getProjectById(projectId);
                     $el.find('#' + p.id).text(p.name);
@@ -95,8 +99,10 @@
                     $el.find('.step-bar.small').stepBar('update', p);
                     $el.attr('data-visible', p.active);
                 }).on('redraw', '.activity', function (e, project) {
+                    //event is fired to update "active" or "inactive" status of the project
                     $(this).activity(project.active);
                 }).on('redraw', '.step-bar.small', function(e, project){
+                    //event is fired to update step bar of the project
                     $(this).stepBar('create', project);
                 });
             return self;
@@ -110,6 +116,7 @@
     };
 
     $(document).ready(function () {
+        //getting JSON and putting into the Projects array
         $.getJSON('js/challenge.json').then(function (data) {
             data.projects.map(function (p) {
                 return Projects.push(new Project(p));
@@ -138,6 +145,7 @@
             $('#listView').hide();
         }
 
+        //to bind project data to item view section
         function populateItemViewWthData(view, p) {
             if (p.id === 1) {
                 view.find('#prevProject').hide();
@@ -167,8 +175,9 @@
             $(parent).find(selector).val(value).end();
         }
 
+        //function to handle visibility of table rows based on the filters
         function applyFilterToProjects(status) {
-            $('tbody>tr').show();
+            $('tbody').find('tr').show();
             switch (status) {
                 case "2":
                     $('tbody>tr[data-visible="false"]').toggle();
@@ -183,17 +192,20 @@
         }
 
         function attachClickEvent() {
+            //click event to go from list view into item view
             $('#toListView').on('click', function () {
                 var $table = $('#projectTable');
                 $('#itemView').hide();
                 $('#listView').show();
             });
+            //event to navigate to the next or prev. item view
             $('.navigation').on('click', function () {
                 var $el = $(this);
                 var id = $el.find('span').text();
                 populateItemViewWthData($('#itemView'), getProjectById(id));
             });
             $('#myModal').on('show.bs.modal', function (e) {
+                //event is fired right after "show" instance method is called
                 var $trigger = $(e.relatedTarget);
                 var $modal = $(e.currentTarget);
                 var title = $trigger.data('title');
@@ -212,18 +224,20 @@
                     setElementValue($modal, '#projectIdForm', Projects.length + 1);
                 }
             }).on('hidden.bs.modal', function (e) {
+                //event is fired when the modal has finished being hidden from the user
                 var $modal = $(e.currentTarget);
                 setElementValue($modal, '#projectIdForm', '');
                 setElementValue($modal, '#projectNameForm', '');
                 setElementValue($modal, '#projectOwnerForm', '');
                 setElementValue($modal, '#projectDescriptionForm', '');
                 $modal.find('#projectActiveForm').prop('checked', '');
-
             }).on('shown.bs.modal', function (e) {
+                //event is fired when the modal has been made visible to the user
                 var $modal = $(e.currentTarget);
                 $modal.find('#projectNameForm').focus();
             });
             $('#form').on('submit', function (e) {
+                //on form submit create and anonymous object to store the project
                 var p = {
                     id: getElementValue(this, '#projectIdForm'),
                     name: getElementValue(this, '#projectNameForm'),
@@ -233,6 +247,7 @@
                 };
                 var project = getProjectById(p.id);
                 var $table = $('#projectTable').find('tbody');
+                //if modifying existing project, update the project instance and trigger update the table row data
                 if (project) {
                     project.name = p.name;
                     project.description = p.description;
@@ -240,8 +255,8 @@
                     project.owner.name = p.owner.name;
                     populateItemViewWthData($('#itemView'), project);
                     $table.find('tr').eq(project.id - 1).trigger('tr:update', p.id);
-
                 } else {
+                    //if creating a new project, get an instance, add to the table and redraw jquery components
                     p['current_step'] = 10;
                     p['total_steps'] = 18;
                     p['start_date']= moment(new Date()).format('X');
@@ -254,13 +269,13 @@
                 }
                 e.preventDefault();
             });
-
+            //event is fired when clicking "Save" button in the modal to create or save the projects
             $('#saveProjectButton').on('click', function () {
                 $('#form').trigger('submit');
                 $('#myModal').modal('hide');
             });
         }
-
+        //creating table filters to filter table data by "Active" or "Inactive" projects
         $('#project-filter').filters({
             filters: [{
                 text: 'View All',
@@ -280,6 +295,8 @@
 
 })(jQuery);
 
+
+//component to create step bar
 (function ($) {
     $.fn.stepBar = function (event, p) {
         var isActive = p.active;
@@ -299,7 +316,7 @@
         return this;
     }
 })(jQuery);
-
+//component to show whether project is active or inactive
 (function ($) {
     $.fn.activity = function (state) {
         if (state) {
@@ -310,7 +327,7 @@
         return this;
     }
 })(jQuery);
-
+//component to filter data table
 (function ($) {
     $.fn.filters = function (options) {
         var self = this;
