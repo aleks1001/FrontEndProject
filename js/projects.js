@@ -47,10 +47,10 @@
                 return moment.unix(self.end_date).format('ll');
             }
         });
-        this.datePickerStartDate = function(){
+        this.datePickerStartDate = function () {
             return moment.unix(self.start_date).format('L');
         };
-        this.datePickerEndDate = function(){
+        this.datePickerEndDate = function () {
             return moment.unix(self.end_date).format('L');
         };
         this.getProjectPeriod = function () {
@@ -108,7 +108,7 @@
                 }).on('redraw', '.activity', function (e, project) {
                     //event is fired to update "active" or "inactive" status of the project
                     $(this).activity(project.active);
-                }).on('redraw', '.step-bar.small', function(e, project){
+                }).on('redraw', '.step-bar.small', function (e, project) {
                     //event is fired to update step bar of the project
                     $(this).stepBar('create', project);
                 });
@@ -212,9 +212,19 @@
                 var id = $el.find('span').text();
                 populateItemViewWthData($('#itemView'), getProjectById(id));
             });
-            $datePicker.on('show', function(){
+            $datePicker.on('show', function () {
 
             });
+            $('[data-toggle="popover"]').popover({
+                container: 'body',
+                html: true,
+                placement: 'bottom',
+                content: function(){
+                    var $form = $('#popover-form').clone(true).removeClass('hide');
+                    return $form.html();
+                }
+            });
+
             $('#myModal').on('show.bs.modal', function (e) {
                 //event is fired right after "show" instance method is called
                 var $trigger = $(e.relatedTarget);
@@ -300,6 +310,7 @@
                 $('#myModal').modal('hide');
             });
         }
+
         //creating table filters to filter table data by "Active" or "Inactive" projects
         $('#project-filter').filters({
             filters: [{
