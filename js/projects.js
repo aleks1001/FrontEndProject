@@ -124,7 +124,7 @@
 
     $(document).ready(function () {
         //getting JSON and putting into the Projects array
-        $.getJSON('js/challenge.json').then(function (data) {
+        $.getJSON('https://raw.githubusercontent.com/aleks1001/FrontEndProject/master/js/challenge.json').then(function (data) {
             data.projects.map(function (p) {
                 return Projects.push(new Project(p));
             });
